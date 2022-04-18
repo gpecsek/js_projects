@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #F2F2F2;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.message {
+    margin: auto;
+    margin-top: 100px;
+    padding: 1rem;
+    width: 600px;
+    background-color: #fcc9c9;
+    border-left: 5px solid #ad1818;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #000000;
+}
+
+.player-control {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: 2rem;
+    width: 600px;
+    border-radius: 5px;
+    color: #000000;
+}
+.player-one {
+    width: 150px;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+}
+.player-two {
+    width: 150px;
+    border: 1px solid #a7a7a7;
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+}
+.clear {
+    width: 150px;
+    background-color: #7ca9ce;
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+}
+.clear:hover {
+    cursor: pointer;
+    background-color: #6587a3;
+}
+
+.container {
+    width: 300px;
+    height: 300px;
+    background-color: rgb(130, 169, 252)
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.row {
+    width: 300px;
+    height: 100px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.cell {
+    height: 100px;
+    width: 100px;
+    background-color: #bcffca;
+    text-align: center;
+    font-size: 6rem;
+    font-weight: bold;
+    color: #000000;
+}
+
+.dark-cell {
+    background-color: #afd2ff;
+}
+
+.light-cell {
+    background-color: #bcffca;
+}
+.cell:hover {
+    cursor: pointer;
+    background-color: #fd9999;
+}
+
+.active-player {
+    background-color: #49cc66;
+}
+
+.table-array {
+    background-color: #a7a7a7;
+    width: 150px;
+    margin: auto;
+    margin-top: 25rem;
+    height: 30px;
+    padding: 15px;
+    text-align: center;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-tac-toe Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+</head>
+<body>
+    <div class="message" id="message">&nbsp;</div>
+    <div class="player-control">
+        <div class="player-one active-player" id="player-1">
+            Player One (X)
+        </div>
+        <div class="player-two" id="player-2">
+            Player Two (O)
+        </div>
+        <div class="clear" id="clearBtn">
+            CLEAR TABLE
+        </div>
+    </div>
+    <div class="container center">
+        <div class="row">
+            <div class="cell dark-cell" id="cell-11"></i></div>
+            <div class="cell light-cell" id="cell-12"></div>
+            <div class="cell dark-cell" id="cell-13"></div>
+        </div>
+        <div class="row">
+            <div class="cell light-cell" id="cell-21"></div>
+            <div class="cell dark-cell" id="cell-22"></div>
+            <div class="cell light-cell" id="cell-23"></div>
+        </div>
+        <div class="row">
+            <div class="cell dark-cell" id="cell-31"></div>
+            <div class="cell light-cell" id="cell-32"></div>
+            <div class="cell dark-cell" id="cell-33"></div>
+        </div>
+    </div>
+    <div class="table-array" id="table-array"></div>
+    <script src="script.js"></script>
+</body>
+</html>
