@@ -9,7 +9,7 @@ export default class Grid {
             y: 0
         }
         this.velocity = {
-            x: 3,
+            x: 2,
             y: 0
         }
         this.invaders = [];
@@ -38,7 +38,7 @@ export default class Grid {
 
         if(this.position.x + this.width >= this.canvasWidth  || this.position.x <= 0) {
             this.velocity.x = -this.velocity.x;
-            this.velocity.y = 50;
+            this.velocity.y = 25;
         }
     }
 }

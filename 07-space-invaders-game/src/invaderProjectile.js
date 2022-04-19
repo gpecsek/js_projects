@@ -1,17 +1,15 @@
-export default class Projectile {
+export default class InvaderProjectile {
     constructor({ position, velocity}) {
         this.position = position;
         this.velocity = velocity
 
-        this.radius = 5;
+        this.width = 5;
+        this.height = 15;
     }
 
     draw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
+        ctx.fillStyle = 'green';
+        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 
     update(ctx) {
