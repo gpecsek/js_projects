@@ -8,7 +8,7 @@ export default class Invader {
         img.src = './img/invader.png';
         
         img.onload = () => {
-            const scale = 0.04;
+            const scale = 0.03;
             this.img = img;
             this.width = img.width * scale;
             this.height = img.height * scale;

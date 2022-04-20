@@ -3,13 +3,14 @@ import Projectile from "./projectile.js";
 export default class Player {
     constructor(canvasWidth, canvasHeight) {
         this.rotation = 0;
+        this.opacity = 1;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         const img = new Image();
         img.src = './img/spaceship2.png';
         
         img.onload = () => {
-            const scale = 0.10;
+            const scale = 0.07;
             this.img = img;
             this.width = img.width * scale;
             this.height = img.height * scale;
@@ -28,6 +29,7 @@ export default class Player {
         //ctx.fillStyle = 'red';
         //ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
         ctx.save();
+        ctx.globalAlpha = this.opacity;
         ctx.translate(this.position.x + this.width / 2, this.position.y + this.height / 2);
         ctx.rotate(this.rotation);
         ctx.translate(-this.position.x - this.width / 2, -this.position.y - this.height / 2);

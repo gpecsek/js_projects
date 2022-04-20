@@ -1,6 +1,7 @@
 export default class InputHandler {
-    constructor(player, projectiles) {
+    constructor(player, projectiles, game) {
         document.addEventListener('keydown', ({ key }) => {
+            if (game.over) return
             switch (key) {
                 case 'a':
                     player.moveLeft();
@@ -21,6 +22,7 @@ export default class InputHandler {
         });
         
         document.addEventListener('keyup', ({ key }) => {
+            if (game.over) return
             switch (key) {
                 case 'a':
                     if(player.velocity.x < 0) player.stop();

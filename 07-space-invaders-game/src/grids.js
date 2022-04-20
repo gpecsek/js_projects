@@ -24,7 +24,7 @@ export default class Grid {
             for(let y = 0; y < rows; y++) {
                 this.invaders.push(new Invader(this.canvasWidth, this.canvasHeight, {position: {
                     x: x * 100,
-                    y: y * 50
+                    y: y * 50 + 50
                 }}));
             }
         }

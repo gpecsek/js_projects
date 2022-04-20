@@ -3,5 +3,18 @@
 }
 
 body {
-    background-color: #c7c7c7;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.score {
+    position: fixed;
+    z-index: 10;
+    color: #FFFFFF;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

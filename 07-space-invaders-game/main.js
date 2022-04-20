@@ -4,24 +4,44 @@ import InputHandler from './src/input.js';
 import InvaderProjectile from './src/invaderProjectile.js';
 import Particle from './src/particle.js';
 
+const scoreEl = document.getElementById('scoreEl');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.height = innerHeight;
-canvas.width = innerWidth;
+canvas.height = 576;
+canvas.width = 1024;
 const projectiles = [];
 const grids = [];
 const invaderProjectiles = [];
 const particles = [];
-
-const player = new Player(canvas.width, canvas.height)
-new InputHandler(player, projectiles);
-
 let frames = 0;
 let randomInterval = 5000;   // Math.floor(Math.random() * 500 + 500);
+let game = {
+    over: false,
+    active: true
+}
+let score = 0;
 
-function createParticles({object, color}) {
-    for (let i = 0; i < 15; i++) {
+const player = new Player(canvas.width, canvas.height)
+new InputHandler(player, projectiles, game);
+
+for (let i = 0; i < 100; i++) {
+    particles.push(new Particle({
+        position: {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height
+        },
+        velocity: {
+            x: 0,
+            y: 0.5
+        },
+        radius: Math.random() * 2,
+        color: 'white'
+    }));
+}
+
+function createParticles({object, color, fades}) {
+    for (let i = 0; i < 25; i++) {
         particles.push(new Particle({
             position: {
                 x: object.position.x + object.width / 2,
@@ -32,12 +52,15 @@ function createParticles({object, color}) {
                 y: (Math.random() - 0.5) * 2
             },
             radius: Math.random() * 5,
-            color: color || 'green'  // default value 'green'
+            color: color || 'green',  // default value 'green'
+            fades
         }));
     }
 }
 
 function animate() {
+    if(!game.active) return;
+
     requestAnimationFrame(animate);
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -45,6 +68,12 @@ function animate() {
     player.update(ctx);
 
     particles.forEach((particle, particleIndex) => {
+
+        if(particle.position.y + particle.radius >= canvas.height) {
+            particle.position.x = Math.random() * canvas.width;
+            particle.position.y = -particle.radius;
+        }
+
         if(particle.opacity <= 0) {
             setTimeout(() => {
                 particles.splice(particleIndex, 1);
@@ -71,10 +100,18 @@ function animate() {
             ) {
             setTimeout(() => {
                 invaderProjectiles.splice(invaderProjectileIndex, 1);
+                player.opacity = 0;
+                game.over = true;
             }, 0);
+
+            setTimeout(() => {
+                game.active = false;
+            }, 2000);
+
             createParticles({
                 object: player,
-                color: 'red'
+                color: 'red',
+                fades: true
             });
         }
     });
@@ -120,8 +157,12 @@ function animate() {
 
                         // Remove invader and projectile here
                         if(invaderFound && projectileFound) {
+                            score += 100;
+                            scoreEl.innerHTML = score;
+
                             createParticles({
-                                object: invader
+                                object: invader,
+                                fades: true
                             });
                             
                             projectiles.splice(projectileIndex, 1);
