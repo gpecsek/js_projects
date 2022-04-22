@@ -1,18 +1,20 @@
 export default class Player {
-    constructor(gravity, canvasHeight) {
+    constructor(gravity, canvasWidth, canvasHeight) {
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.width = 30;
+        this.height = 30;
+
         this.position = {
-            x: 100,
-            y: 100
+            x: this.canvasWidth / 2 - this.width / 2,
+            y: this.canvasHeight - 250
         }
         this.velocity = {
             x: 0,
             y: 0
         }
-        this.width = 30;
-        this.height = 30;
         this.color = 'blue';
         this.gravity = gravity;
-        this.canvasHeight = canvasHeight;
     }
 
     draw(ctx) {

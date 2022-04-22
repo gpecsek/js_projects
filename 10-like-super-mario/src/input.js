@@ -1,7 +1,6 @@
 export default class InputHandler {
     constructor(player, keys){
         document.addEventListener('keydown', ({keyCode}) => {
-            console.log(keyCode);
             switch(keyCode) {
                 case 39: // arrow key right
                     player.moveRight(keys);
@@ -19,7 +18,6 @@ export default class InputHandler {
         });
 
         document.addEventListener('keyup', ({keyCode}) => {
-            console.log(keyCode);
             switch(keyCode) {
                 case 39: // arrow key right
                     player.stop("right", keys);
