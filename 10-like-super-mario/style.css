@@ -13,5 +13,14 @@ body {
     padding-left: 1rem;
     padding-top: 1rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-
+    font-size: 12px;
+}
+.scroll {
+    position: fixed;
+    z-index: 10;
+    color: white;
+    padding-left: 1rem;
+    padding-top: 2.25rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
 }

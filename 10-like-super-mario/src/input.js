@@ -8,7 +8,7 @@ export default class InputHandler {
                 case 37: // arrow key left
                     player.moveLeft(keys);
                     break;
-                case 38: // arrow key up
+                case 32: // space
                     player.moveUp();
                     break;
                 case 40: // arrow key down
