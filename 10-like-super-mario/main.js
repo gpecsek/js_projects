@@ -28,7 +28,26 @@ const keys = {
 }
 let scrollOffSet = 0;
 
-const platforms = [new Platform({x: 200, y: 250}), new Platform({x: 450, y: 325})];
+const platforms = [
+    new Platform({
+        position: {
+            x: 0,
+            y: canvas.height - 125
+        }
+    }),
+    new Platform({
+        position: {
+            x: 578,
+            y: canvas.height - 125
+        }
+    }),
+    new Platform({
+        position: {
+            x: 1400,
+            y: canvas.height - 125
+        }
+    })
+];
 const player = new Player(gravity, canvas.width, canvas.height);
 const inputHandler = new InputHandler(player, keys);
 
