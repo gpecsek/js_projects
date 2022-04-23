@@ -1,19 +1,26 @@
 export default class Platform {
     constructor({x, y}) {
-        this.position = {
-            x,
-            y
+        const img = new Image();
+        img.src = './img/platform.png';
+
+                
+        img.onload = () => {
+            this.img = img;
+            this.position = {
+                x,
+                y
+            }
+            this.width = 250;
+            this.height = 50;
         }
-        this.width = 200;
-        this.height = 20;
+        console.log(typeof this.img);
     }
 
     draw(ctx) {
-        ctx.fillStyle = 'yellow';
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        ctx.drawImage(this.img, this.position.x, this.position.y, this.width, this.height);
     }
 
     update(ctx) {
         this.draw(ctx);
     }
-}
+}   

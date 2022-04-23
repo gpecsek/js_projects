@@ -6,6 +6,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const fpsEl = document.getElementById('fpsEl');
 const scrollEl = document.getElementById('scrollEl');
+const velocityYEl = document.getElementById('yVelEl');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -19,6 +20,9 @@ const keys = {
         pressed: false
     },
     left: {
+        pressed: false
+    },
+    jump: {
         pressed: false
     }
 }
@@ -65,6 +69,12 @@ function animate() {
         }
     }
 
+    // Player jump
+    if(keys.jump.pressed) {
+        player.velocity.y -= 15;
+        keys.jump.pressed = false;
+    }
+
     // Platform and player collision detection
     platforms.forEach((platform) => {
         if(
@@ -74,6 +84,7 @@ function animate() {
             player.position.x <= platform.position.x + platform.width
             ) {
             player.velocity.y = 0;
+            keys.jump.pressed = false;
         }
     });
 
@@ -81,6 +92,8 @@ function animate() {
     if(scrollOffSet > 2000) {
         console.log('You Win!');
     }
+
+    yVelEl.innerHTML = player.velocity.y;
 
     // Draw platform
     platforms.forEach((platform) => {

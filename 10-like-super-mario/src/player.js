@@ -44,8 +44,8 @@ export default class Player {
         keys.right.pressed = true;
     }
 
-    moveUp() {
-        this.velocity.y -= 15;
+    moveUp(keys) {
+        keys.jump.pressed = true;
     }
 
     moveDown() {

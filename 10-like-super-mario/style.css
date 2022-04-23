@@ -24,3 +24,13 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
 }
+
+.velocityY {
+    position: fixed;
+    z-index: 10;
+    color: white;
+    padding-left: 1rem;
+    padding-top: 3.5rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+}

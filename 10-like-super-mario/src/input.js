@@ -9,7 +9,7 @@ export default class InputHandler {
                     player.moveLeft(keys);
                     break;
                 case 32: // space
-                    player.moveUp();
+                    player.moveUp(keys);
                     break;
                 case 40: // arrow key down
                     player.moveDown();
