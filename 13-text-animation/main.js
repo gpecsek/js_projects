@@ -7,8 +7,8 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 let particleArray = [];
-let adjustX = 5;
-let adjustY = -20;
+let adjustX = 5 ;
+let adjustY = -5;
 
 //Handle mouse
 const mouse = {
@@ -23,9 +23,9 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.y;
 });
 
-ctx.font = '20px Verdana';
+ctx.font = '40px Verdana';
 ctx.fillStyle = 'white';
-ctx.fillText('TEXT', 0, 40);
+ctx.fillText('A', 0, 40);
 
 const textCoordinates = ctx.getImageData(0, 0, 100, 100);
 
@@ -51,9 +51,9 @@ function connect() {
             let dx = particleArray[a].position.x - particleArray[b].position.x;
             let dy = particleArray[a].position.y - particleArray[b].position.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            opacityValue = 1 - (distance / 50);
+            opacityValue = 1 - (distance / 100);
             ctx.strokeStyle = 'rgba(255, 255, 255,' + opacityValue + ')';
-            if (distance < 50) {
+            if (distance < 100) {
                 ctx.lineWidth = 0.5;
                 ctx.beginPath();
                 ctx.moveTo(particleArray[a].position.x, particleArray[a].position.y);
