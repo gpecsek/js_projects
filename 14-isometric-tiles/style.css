@@ -14,3 +14,13 @@ canvas {
     top: 0;
     left: 0;
 }
+
+.fps {
+    position: fixed;
+    z-index: 10;
+    color: white;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+}
