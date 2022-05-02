@@ -1,14 +1,11 @@
 export default class Tile {
-    constructor(x, y, z, offSet, colorTop, colorRight, colorLeft) {
+    constructor(x, y, z, offSet, tileZoom, colorTop, colorRight, colorLeft) {
         this.position = {
             x: x,
             y: y,
             z: z
         }
-        this.tile = {
-            width: 100,
-            height: 50
-        }
+        this.tile = tileZoom;
         this.color = {
             top: colorTop,
             right: colorRight,

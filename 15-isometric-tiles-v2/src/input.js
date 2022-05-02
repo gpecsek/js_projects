@@ -14,6 +14,12 @@ export default class InputHandler {
                 case 40: // arrow key down
                     keys.down.pressed = true;
                     break;
+                case 81: // "Q" key down - Zoom In
+                    keys.zoomIn.pressed = true;
+                    break;
+                case 65: // "A" key down - Zoom Out
+                    keys.zoomOut.pressed = true;
+                    break;
             }
         });
         document.addEventListener('keyup', ({keyCode}) => {
@@ -29,6 +35,12 @@ export default class InputHandler {
                     break;
                 case 40: // arrow key down
                     keys.down.pressed = false;
+                    break;
+                case 81: // "Q" key down - Zoom In
+                    keys.zoomIn.pressed = false;
+                    break;
+                case 65: // "A" key down - Zoom Out
+                    keys.zoomOut.pressed = false;
                     break;
             }
         });

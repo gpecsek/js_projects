@@ -1,9 +1,10 @@
 import Tile from './tile.js';
 
 export default class Map {
-    constructor(mapTilesArray, scrollOffSet) {
+    constructor(mapTilesArray, scrollOffSet, tileZoom) {
         this.mapTilesArray = mapTilesArray;
         this.scrollOffSet = scrollOffSet;
+        this.tileZoom = tileZoom;
         this.color = {
             top: 'grey',
             right: 'grey',
@@ -51,7 +52,7 @@ export default class Map {
                     this.color.right = 'rgba(218, 177, 111, 1)';
                     z = 1.2;
                 }
-                this.mapTilesArray.push(new Tile(x, y, z, this.scrollOffSet, this.color.top, this.color.right, this.color.left));
+                this.mapTilesArray.push(new Tile(x, y, z, this.scrollOffSet, this.tileZoom, this.color.top, this.color.right, this.color.left));
             }
         }
     }
