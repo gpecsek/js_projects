@@ -2,8 +2,8 @@ export default class Tile {
     constructor(x, y, offSet, tile, color) {
         this.tile = tile;   // Tile Width and Height
         this.rectPos = {    // Position of the tile in the grid
-            x,
-            y
+            x: x,
+            y: y
         }
         this.position = {x: 0, y: 0, z: 0}   // X and Y position of the tile in pixel
         this.offSet = offSet;   // The X and Y offSet of the tile rectangle
@@ -28,15 +28,15 @@ export default class Tile {
 
     update(ctx) {
         this.position = {   // X and Y position of the tile in pixel
-            x: (this.rectPos.x - this.rectPos.y) * this.tile.width / 2,
-            y: (this.rectPos.x + this.rectPos.y) * this.tile.height / 2,
+            x: (this.rectPos.y - this.rectPos.x) * this.tile.width / 2,
+            y: (this.rectPos.y + this.rectPos.x) * this.tile.height / 2,
             z: 0.1
         }
         this.poly = [   // updating the coordinates
             [this.offSet.x + this.position.x + this.tile.width / 2, this.offSet.y + this.position.y],                       // x1,y1
             [this.offSet.x + this.position.x + this.tile.width, this.offSet.y + this.position.y + this.tile.height / 2],    // x2,y2
             [this.offSet.x + this.position.x + this.tile.width / 2, this.offSet.y + this.position.y + this.tile.height],    // x3,y3
-            [this.offSet.x + this.position.x, this.offSet.y + this.position.y + this.tile.height / 2]                                       // x4, y4
+            [this.offSet.x + this.position.x, this.offSet.y + this.position.y + this.tile.height / 2]                       // x4, y4
         ]
         this.draw(ctx)
     }

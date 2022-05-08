@@ -12,8 +12,8 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 let tile = {
-    width: 60,
-    height: 30
+    width: 100,
+    height: 50
 }
 let offSet = {
     x: (canvas.width / 2) - (tile.width / 2),
@@ -45,8 +45,8 @@ let keys = {
 const inputHandler = new InputHandler(keys);
 
 function init() {
-    for (let y = 0; y < 20; y++) {
-        for (let x = 0; x < 20; x++) {
+    for (let x = 0; x < 10; x++) {
+        for (let y = 0; y < 10; y++) {
             mapTilesArray.push(new Tile(x, y, offSet, tile, tileColor))
         }
     }
