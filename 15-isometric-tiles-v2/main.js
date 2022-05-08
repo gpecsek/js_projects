@@ -1,8 +1,9 @@
 import InputHandler from './src/input.js';
 import Map from './src/map.js';
-import Tile from './src/tile.js';
 
-const fpsEl = document.getElementById('fpsEl');
+const mouseCoordinatesEl = document.getElementById('mouseCoordinatesEl');
+const cellEl = document.getElementById('cellEl');
+const scrollOffSetEl = document.getElementById('scrollOffSetEl');
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -11,6 +12,12 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 let mapTilesArray = [];
+const mouse = {
+    position: {
+        x: 0,
+        y: 0
+    }
+}
 const keys = {
     right: {
         pressed: false
@@ -39,6 +46,11 @@ let scrollOffSet = {
 let tileZoom = {
     width: 80,
     height: 40
+}
+
+let mouseOffset = {
+    x: 0,
+    y: 0
 }
 
 const inputHandler = new InputHandler(keys);
@@ -83,11 +95,34 @@ function animate(timeStamp) {
         mapTilesArray.forEach((mapTile) => {
             mapTile.update(ctx);
         });
+
         timer = 0;
     } else {
         timer += deltaTime;
     }
+
+    scrollOffSetEl.innerHTML = scrollOffSet.x + ", " + scrollOffSet.y;
     requestAnimationFrame(animate);
 }
 
 animate(0);
+
+window.addEventListener('mousemove', (e) => {
+    mouse.position.x = e.x;
+    mouse.position.y = e.y;
+    mouseCoordinatesEl.innerHTML = 'x: ' + mouse.position.x + ' y: ' + mouse.position.y;
+    //drawRect(mouse);
+});
+
+function drawRect(mousePos) {
+
+    let x1 = Math.floor(mousePos.position.x / tileZoom.width) * tileZoom.width;
+    let y1 = Math.floor(mousePos.position.y / tileZoom.height) * tileZoom.height;
+
+    ctx.save();
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(x1, x2, tileZoom.width, tileZoom.height);
+
+    ctx.restore();
+}

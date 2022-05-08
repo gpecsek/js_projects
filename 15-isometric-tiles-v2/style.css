@@ -14,7 +14,7 @@ canvas {
     left: 0;
 }
 
-.fps {
+.mouseCoordinates {
     position: fixed;
     z-index: 10;
     color: black;
@@ -22,10 +22,9 @@ canvas {
     top: 1rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 14px;
-    font-weight: bold;
 }
 
-.mapMoving {
+.cell {
     position: fixed;
     z-index: 10;
     color: black;
@@ -35,22 +34,12 @@ canvas {
     font-size: 14px;
 }
 
-.zoomIn {
+.scrollOffSet {
     position: fixed;
     z-index: 10;
     color: black;
     left: 1rem;
     top: 3rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-}
-
-.zoomOut {
-    position: fixed;
-    z-index: 10;
-    color: black;   
-    left: 1rem;
-    top: 4rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 14px;
 }

@@ -12,6 +12,10 @@ export default class Tile {
             left: colorLeft
         };
         this.offSet = offSet;
+        this.origo = {
+            x: this.offSet.x + this.position.x * this.tile.width + this.tile.width / 2,
+            y: this.offSet.y + this.position.y * this.tile.height + this.tile.height / 2
+        }
     }
 
     draw(ctx) {
@@ -53,6 +57,10 @@ export default class Tile {
     }
 
     update(ctx) {
+        this.origo = {
+            x: this.offSet.x + this.position.x * this.tile.width + this.tile.width / 2,
+            y: this.offSet.y + this.position.y * this.tile.height + this.tile.height / 2
+        }
         this.draw(ctx);
     }
 }
