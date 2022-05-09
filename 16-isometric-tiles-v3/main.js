@@ -8,6 +8,7 @@ const rect = canvas.getBoundingClientRect();
 const tilePosEl = document.getElementById('tilePosEl');
 const mousePosEl = document.getElementById('mousePosEl');
 const fpsPosEl = document.getElementById('fpsPosEl');
+const tileIndexEl = document.getElementById('tileIndexEl');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -69,7 +70,7 @@ function animate(timeStamp) {
     times.push(now);
     fps = times.length;
 
-    if (timer > 250) {
+    if (timer > 200) {
         fpsPosEl.innerHTML = fps;
         timer = 0;
     } else {
@@ -131,6 +132,7 @@ function animate(timeStamp) {
             tileIndexMouseIn = tileIndex;
         }
     });
+    tileIndexEl.innerHTML = tileIndexMouseIn;
 
     requestAnimationFrame(animate);
 }
@@ -144,5 +146,5 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-    if (tileIndexMouseIn) mapTilesArray[tileIndexMouseIn].color = randomColor();
+    if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
 });

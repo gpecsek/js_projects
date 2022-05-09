@@ -35,10 +35,19 @@
     font-size: 14px;
 }
 
-.fpsPos {
+.tileIndex {
     position: absolute;
     z-index: 10;
     top: 50px;
+    left: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+.fpsPos {
+    position: absolute;
+    z-index: 10;
+    top: 70px;
     left: 10px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 14px;
