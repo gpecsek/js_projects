@@ -11,6 +11,12 @@
     overflow: hidden;
 }
 
+.select-none {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
 .tilePos {
     position: absolute;
     z-index: 10;

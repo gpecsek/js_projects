@@ -28,8 +28,9 @@ let rectPos = {
     y: 0
 }
 let mapTilesArray = [];
-let tileIndexMouseIn;
 let tileColor = 'grey'; // Basic color of the tiles
+
+let tileIndexMouseIn;
 
 let keys = {
     pressed: {
@@ -84,6 +85,7 @@ function animate() {
 
     // Check which tile the mouse in and draw a red frame around the tile
     // Plus store the tile index (tileIndexMouseIn)
+    tileIndexMouseIn = undefined;
     mapTilesArray.forEach((tile, tileIndex) => {
         let x = inside([ mousePos.x - rect.left, mousePos.y - rect.top ], tile.poly)
         if (x) {
@@ -120,7 +122,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-    mapTilesArray[tileIndexMouseIn].color = randomColor();
+    if (tileIndexMouseIn) mapTilesArray[tileIndexMouseIn].color = randomColor();
 });
 
 function inside(p, vs) {
