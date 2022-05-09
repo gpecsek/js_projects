@@ -1,4 +1,4 @@
-import Tile from "./src/tiles.js";
+import {inside, randomColor, drawMap} from "./src/functions.js";
 import InputHandler from "./src/input.js";
 
 const canvas = document.getElementById('canvas');
@@ -7,6 +7,7 @@ const rect = canvas.getBoundingClientRect();
 
 const tilePosEl = document.getElementById('tilePosEl');
 const mousePosEl = document.getElementById('mousePosEl');
+const fpsPosEl = document.getElementById('fpsPosEl');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -42,21 +43,42 @@ let keys = {
         zoomOut: false
     }
 }
+// Measuring FPS variables
+const times = [];
+let fps;
+let now;
+let lastTime = 0;
+let deltaTime = 0;
+let timer = 0;
 
+// initializing input control
 const inputHandler = new InputHandler(keys);
 
-function init() {
-    for (let x = 0; x < 10; x++) {
-        for (let y = 0; y < 10; y++) {
-            mapTilesArray.push(new Tile(x, y, offSet, tile, tileColor))
-        }
-    }
-}
-init();
+// Populate the mapTilesArray with data (Tiles)
+drawMap(10, 10, mapTilesArray, offSet, tile, tileColor);
 
-function animate() {
+function animate(timeStamp) {
+    // measuring FPS
+    deltaTime = Math.floor(timeStamp - lastTime);
+    lastTime = timeStamp;
+
+    now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+
+    if (timer > 250) {
+        fpsPosEl.innerHTML = fps;
+        timer = 0;
+    } else {
+        timer += deltaTime;
+    }
+
+    // Clear the canvas
     ctx.clearRect(0,0, canvas.width, canvas.height);
-    
+        
     // Move the canvas
     if (keys.pressed.right) {
         offSet.x -= 7;
@@ -113,7 +135,7 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-animate();
+animate(0);
 
 window.addEventListener('mousemove', (e) => {
     mousePos.x = e.x;
@@ -124,22 +146,3 @@ window.addEventListener('mousemove', (e) => {
 window.addEventListener('click', (e) => {
     if (tileIndexMouseIn) mapTilesArray[tileIndexMouseIn].color = randomColor();
 });
-
-function inside(p, vs) {
-    var inside = false;
-    for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-      var xi = vs[i][0], yi = vs[i][1];
-      var xj = vs[j][0], yj = vs[j][1];
-      var intersect = ((yi > p[1]) != (yj > p[1])) && (p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi);
-      if (intersect) inside = !inside;
-    }
-    return inside;
-  };
-
-  function randomColor() {
-      let r = Math.floor(Math.random() * 254 + 1);
-      let g = Math.floor(Math.random() * 254 + 1);
-      let b = Math.floor(Math.random() * 254 + 1);
-      let randomCol = "rgba(" + r + "," + g + "," + b + ",1)";
-      return randomCol;
-  }

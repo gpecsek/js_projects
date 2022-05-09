@@ -17,6 +17,15 @@
     user-select: none
 }
 
+.mousePos {
+    position: absolute;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
+
 .tilePos {
     position: absolute;
     z-index: 10;
@@ -26,10 +35,10 @@
     font-size: 14px;
 }
 
-.mousePos {
+.fpsPos {
     position: absolute;
     z-index: 10;
-    top: 10px;
+    top: 50px;
     left: 10px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 14px;
