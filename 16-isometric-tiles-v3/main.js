@@ -120,7 +120,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-    mapTilesArray[tileIndexMouseIn].color = "green";
+    mapTilesArray[tileIndexMouseIn].color = randomColor();
 });
 
 function inside(p, vs) {
@@ -133,3 +133,11 @@ function inside(p, vs) {
     }
     return inside;
   };
+
+  function randomColor() {
+      let r = Math.floor(Math.random() * 254 + 1);
+      let g = Math.floor(Math.random() * 254 + 1);
+      let b = Math.floor(Math.random() * 254 + 1);
+      let randomCol = "rgba(" + r + "," + g + "," + b + ",1)";
+      return randomCol;
+  }
