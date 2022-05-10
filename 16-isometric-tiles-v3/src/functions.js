@@ -1,13 +1,36 @@
 import Tile from "./tiles.js";
 
 // Draw MAP
-export function drawMap(width, height, mapTilesArray, offSet, tile, tileColor) {
-    for (let x = 0; x < width; x++) {
-        for (let y = 0; y < height; y++) {
-            mapTilesArray.push(new Tile(x, y, offSet, tile, tileColor))
+export function drawMap(mapTilesArray, offSet, tile, tileColor) {
+    let blocked = 0;
+    for (let x = 0; x < tileMap.length; x++) {
+        for (let y = 0; y < tileMap[x].length; y++) {
+            if (tileMap[x][y] == 1) {
+                blocked = 1;
+            } else {
+                blocked = 0;
+            }
+            mapTilesArray.push(new Tile(x, y, offSet, tile, tileColor, blocked))
         }
     }
 }
+
+// Map 1
+const tileMap = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
 
 // This algorithm is checking whether the mouse is inside a tile or not
 export function inside(p, vs) {

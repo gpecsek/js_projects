@@ -57,12 +57,10 @@ let timer = 0;
 const inputHandler = new InputHandler(keys);
 
 // Populate the mapTilesArray with data (Tiles)
-drawMap(10, 10, mapTilesArray, offSet, tile, tileColor);
-console.log(mapTilesArray);
-// Create the player
-const player = new Player(mapTilesArray[5].position.x, mapTilesArray[5].position.y, 0.3, offSet, tile, '#DE847B');
+drawMap(mapTilesArray, offSet, tile, tileColor);
 
-console.log(player);
+// Create the player
+const player = new Player(mapTilesArray[0].position.x, mapTilesArray[0].position.y, 0, offSet, tile, '#DE847B');
 
 function animate(timeStamp) {
     // measuring FPS
@@ -140,7 +138,23 @@ function animate(timeStamp) {
     });
     tileIndexEl.innerHTML = tileIndexMouseIn;
 
+    // Updating player
     player.update(ctx);
+
+    // Draw lines between the tile the mouse over and the tile where the player is
+    if(tileIndexMouseIn != undefined) {
+        ctx.save();
+
+        ctx.lineWidth = '1px';
+        ctx.strokeStyle = 'red';
+
+        ctx.beginPath();
+        ctx.moveTo(mapTilesArray[tileIndexMouseIn].tileOrigo.x, mapTilesArray[tileIndexMouseIn].tileOrigo.y);
+        ctx.lineTo(player.playerOrigo.x, player.playerOrigo.y);
+        ctx.stroke();
+
+        ctx.restore();
+    }
 
     requestAnimationFrame(animate);
 }
@@ -156,6 +170,8 @@ window.addEventListener('mousemove', (e) => {
 window.addEventListener('click', (e) => {
     // if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
     console.log(tileIndexMouseIn);
-    player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
-    player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
+    if (tileIndexMouseIn != undefined) {
+        player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
+        player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
+    }
 });

@@ -1,5 +1,5 @@
 export default class Tile {
-    constructor(x, y, offSet, tile, color) {
+    constructor(x, y, offSet, tile, color, blocked) {
         this.tile = tile;   // Tile Width and Height
         this.rectPos = {    // Position of the tile in the grid
             x: x,
@@ -17,6 +17,7 @@ export default class Tile {
             x: this.offSet.x + this.position.x + (this.tile.width / 2),
             y: this.offSet.y + this.position.y + (this.tile.height / 2)
         }
+        this.blocked = blocked;
     }
 
     draw(ctx) {
@@ -30,19 +31,21 @@ export default class Tile {
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();
-        ctx.restore();
 
-        ctx.save();
-
-        ctx.beginPath();
-        ctx.arc(this.tileOrigo.x, this.tileOrigo.y, 1, 0, Math.PI * 2);
-        ctx.fillStyle = 'red';
-        ctx.fill();
+        if (this.blocked == 0) {
+            ctx.beginPath();
+            ctx.arc(this.tileOrigo.x, this.tileOrigo.y, 1, 0, Math.PI * 2);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+        }
 
         ctx.restore();
     }
 
     update(ctx) {
+        if (this.blocked == 1) {
+            this.color = 'black';
+        }
         this.position = {   // X and Y position of the tile in pixel
             x: (this.rectPos.y - this.rectPos.x) * this.tile.width / 2,
             y: (this.rectPos.y + this.rectPos.x) * this.tile.height / 2,
