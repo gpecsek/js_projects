@@ -5,10 +5,18 @@ export default class Tile {
             x: x,
             y: y
         }
-        this.position = {x: 0, y: 0, z: 0}   // X and Y position of the tile in pixel
+        this.position = {   // X and Y position of the tile in pixel
+            x: (this.rectPos.y - this.rectPos.x) * this.tile.width / 2,
+            y: (this.rectPos.y + this.rectPos.x) * this.tile.height / 2,
+            z: 0
+        }
         this.offSet = offSet;   // The X and Y offSet of the tile rectangle
         this.color = color;     // color of the tile
         this.poly = [];          // The coordinates of the tile. I'm using these coordinates to check if the mouse is inside the tile or not
+        this.tileOrigo = {
+            x: this.offSet.x + this.position.x + (this.tile.width / 2),
+            y: this.offSet.y + this.position.y + (this.tile.height / 2)
+        }
     }
 
     draw(ctx) {
@@ -22,6 +30,14 @@ export default class Tile {
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.arc(this.tileOrigo.x, this.tileOrigo.y, 1, 0, Math.PI * 2);
+        ctx.fillStyle = 'red';
+        ctx.fill();
 
         ctx.restore();
     }
@@ -30,7 +46,11 @@ export default class Tile {
         this.position = {   // X and Y position of the tile in pixel
             x: (this.rectPos.y - this.rectPos.x) * this.tile.width / 2,
             y: (this.rectPos.y + this.rectPos.x) * this.tile.height / 2,
-            z: 0.1
+            z: 0
+        }
+        this.tileOrigo = {
+            x: this.offSet.x + this.position.x + (this.tile.width / 2),
+            y: this.offSet.y + this.position.y + (this.tile.height / 2)
         }
         this.poly = [   // updating the coordinates
             [this.offSet.x + this.position.x + this.tile.width / 2, this.offSet.y + this.position.y],                       // x1,y1

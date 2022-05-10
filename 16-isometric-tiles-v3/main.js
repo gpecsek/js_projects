@@ -1,5 +1,6 @@
 import {inside, randomColor, drawMap} from "./src/functions.js";
 import InputHandler from "./src/input.js";
+import Player from "./src/player.js";
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -57,6 +58,11 @@ const inputHandler = new InputHandler(keys);
 
 // Populate the mapTilesArray with data (Tiles)
 drawMap(10, 10, mapTilesArray, offSet, tile, tileColor);
+console.log(mapTilesArray);
+// Create the player
+const player = new Player(mapTilesArray[5].position.x, mapTilesArray[5].position.y, 0.3, offSet, tile, '#DE847B');
+
+console.log(player);
 
 function animate(timeStamp) {
     // measuring FPS
@@ -134,6 +140,8 @@ function animate(timeStamp) {
     });
     tileIndexEl.innerHTML = tileIndexMouseIn;
 
+    player.update(ctx);
+
     requestAnimationFrame(animate);
 }
 
@@ -146,5 +154,8 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-    if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
+    // if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
+    console.log(tileIndexMouseIn);
+    player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
+    player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
 });
