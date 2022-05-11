@@ -4,8 +4,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = 400;
 canvas.height = 400;
 
-let cols = 5;
-let rows = 5;
+let cols = 10;
+let rows = 10;
 let gridArray = new Array(cols);
 
 let closedSet = [];
@@ -13,32 +13,65 @@ let openSet = [];
 let start;
 let end;
 let w, h;
+let path = [];
 w = canvas.width / cols;
 h = canvas.height / rows;
 
 class Spot {
     constructor(i, j) {
-        this.x = i;
-        this.y = j;
+        this.i = i;
+        this.j = j;
         this.f = 0;
         this.g = 0;
         this.h = 0;
+        this.neighbors = [];
+        this.previous = undefined;
     }
 
     drawGrid(color) {
         ctx.save();
         ctx.strokeStyle = color;
-        ctx.rect(this.x * w, this.y * h, w, h);
+        ctx.rect(this.i * w, this.j * h, w, h);
         ctx.stroke();
         ctx.restore();
     }
     show(color) {
         ctx.save();
         ctx.fillStyle = color;
-        ctx.rect(this.x * w, this.y * h, w, h);
-        ctx.fill();
+        ctx.fillRect(this.i * w, this.j * h, w, h);
         ctx.restore();
     }
+
+    addNeighbors(grid) {
+        let i = this.i;
+        let j = this.j;
+        if(i < cols - 1) {
+            this.neighbors.push(grid[i + 1][j]);
+        }
+        if (i > 0) {
+            this.neighbors.push(grid[i - 1][j]);
+        }
+        if (j < rows - 1) {
+            this.neighbors.push(grid[i][j + 1]);
+        }
+        if (j > 0) {
+            this.neighbors.push(grid[i][j - 1]);
+        }
+    }
+}
+
+function removeFromArray(arr, elt) {
+    for (let i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] == elt) {
+            arr.splice(i, 1);
+        }
+    }
+}
+
+function heuristic(a, b) {
+    //var d = Math.sqrt(a.i * b.i + a.j * b.j);
+    var d = Math.abs(a.i - b.i) + Math.abs(a.j - b.j);
+    return d;
 }
 
 // Making a 2D array
@@ -52,20 +85,67 @@ for (let i = 0; i < cols; i++) {
     }
 }
 
+for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+        gridArray[i][j].addNeighbors(gridArray);
+    }
+}
+
 start = gridArray[0][0];
 end = gridArray[cols - 1][rows - 1];
 
 openSet.push(start);
-console.log(openSet);
+
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     if(openSet.length > 0) {
         // Keep going
+        var winner = 0;
+        for (let i = 0; i < openSet.length; i++) {
+            if(openSet[i].f < openSet[winner].f) {
+                winner = i;
+            }
+        }
+
+        var current = openSet[winner];
+
+        if(current === end) {
+            console.log("DONE!!!!");
+        }
+
+        removeFromArray(openSet, current);
+        closedSet.push(current);
+
+        var neighbours = current.neighbors;
+        for (let i = 0; i < neighbours.length; i++) {
+            var neighbour = neighbours[i];
+
+            if(!closedSet.includes(neighbour)) {
+                var tempG = neighbour.g + 1;
+
+                if(openSet.includes(neighbour)) {
+                    if(tempG < neighbour.g) {
+                        neighbour.g = tempG;
+                    }
+                } else {
+                    neighbour.g = tempG;
+                    openSet.push(neighbour);
+                }
+
+                neighbour.h = heuristic(neighbour, end);
+
+                neighbour.f = neighbour.g + neighbour.h;
+                neighbour.previous = current;
+            }
+            
+        }
+
     } else {
         // No solution
     }
+
     gridArray.forEach((row) => {
         row.forEach((spot) => {
             spot.drawGrid('white');
@@ -74,11 +154,28 @@ function animate() {
 
     closedSet.forEach((spot) => {
         spot.show('red');
-    })
+    });
 
     openSet.forEach((spot) => {
         spot.show('green');
-    })
+    });
+
+    // Find the path
+    path = [];
+    var temp = current;
+    path.push(temp);
+    if(temp.previous != undefined) {
+        while (temp.previous) {
+            path.push(temp.previous);
+            temp = temp.previous;
+        }
+    }
+    
+
+    path.forEach((spot) => {
+        spot.show('blue');
+    });
+    
 
     requestAnimationFrame(animate);
 }
