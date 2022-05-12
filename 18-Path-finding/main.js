@@ -6,8 +6,8 @@ canvas.height = 400;
 
 let animationRunnig = true;
 
-let cols = 7;
-let rows = 7;
+let cols = 12;
+let rows = 12;
 let gridArray = new Array(cols);
 
 let closedSet = [];
@@ -30,7 +30,7 @@ class Spot {
         this.previous = undefined;
         this.wall = false;
 
-        if(Math.random() < 0.1) {
+        if(Math.random() < 0.2) {
             this.wall = true;
         }
     }
@@ -71,6 +71,18 @@ class Spot {
         if (j > 0) {
             this.neighbors.push(grid[i][j - 1]);
         }
+        if (i > 0 && j > 0) {
+            this.neighbors.push(grid[i - 1][j - 1]);
+        }
+        if (i < cols - 1 && j > 0) {
+            this.neighbors.push(grid[i + 1][j - 1]);
+        }
+        if (i < cols - 1 && j < rows - 1) {
+            this.neighbors.push(grid[i + 1][j + 1]);
+        }
+        if (i > 0 && j < rows - 1) {
+            this.neighbors.push(grid[i - 1][j + 1]);
+        }
     }
 }
 
@@ -80,12 +92,6 @@ function removeFromArray(arr, elt) {
             arr.splice(i, 1);
         }
     }
-}
-
-function heuristic(a, b) {
-    //var d = Math.sqrt(a.i * b.i + a.j * b.j);
-    var d = Math.abs(a.i - b.i) + Math.abs(a.j - b.j);
-    return d;
 }
 
 // Making a 2D array
@@ -107,6 +113,9 @@ for (let i = 0; i < cols; i++) {
 
 start = gridArray[0][0];
 end = gridArray[cols - 1][rows - 1];
+
+start.wall = false;
+end.wall = false;
 
 openSet.push(start);
 
@@ -150,7 +159,7 @@ function animate() {
                         openSet.push(neighbour);
                     }
 
-                    neighbour.h = heuristic(neighbour, end);
+                    neighbour.h = Math.abs(neighbour.i - end.i) + Math.abs(neighbour.j - end.j);
 
                     neighbour.f = neighbour.g + neighbour.h;
                     neighbour.previous = current;
@@ -159,6 +168,8 @@ function animate() {
             }
 
         } else {
+            console.log("No solution!");
+            animationRunnig = false;
             // No solution
         }
 
@@ -177,22 +188,20 @@ function animate() {
         });
 
         // Find the path
-        path = [];
-        var temp = current;
-        path.push(temp);
-        if(temp.previous != undefined) {
+        if (current) {
+            path = [];
+            var temp = current;
+            path.push(temp);
             while (temp.previous) {
                 path.push(temp.previous);
                 temp = temp.previous;
             }
         }
         
-
         path.forEach((spot) => {
             spot.show('blue');
         });
     }    
-
     requestAnimationFrame(animate);
 }
 
