@@ -4,8 +4,10 @@ const ctx = canvas.getContext('2d');
 canvas.width = 400;
 canvas.height = 400;
 
-let cols = 10;
-let rows = 10;
+let animationRunnig = true;
+
+let cols = 7;
+let rows = 7;
 let gridArray = new Array(cols);
 
 let closedSet = [];
@@ -26,14 +28,26 @@ class Spot {
         this.h = 0;
         this.neighbors = [];
         this.previous = undefined;
+        this.wall = false;
+
+        if(Math.random() < 0.1) {
+            this.wall = true;
+        }
     }
 
     drawGrid(color) {
-        ctx.save();
-        ctx.strokeStyle = color;
-        ctx.rect(this.i * w, this.j * h, w, h);
-        ctx.stroke();
-        ctx.restore();
+        if(this.wall) {
+            ctx.save();
+            ctx.fillStyle = 'black';
+            ctx.fillRect(this.i * w, this.j * h, w, h);
+            ctx.restore();
+        } else {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.rect(this.i * w, this.j * h, w, h);
+            ctx.stroke();
+            ctx.restore();   
+        }
     }
     show(color) {
         ctx.save();
@@ -98,84 +112,86 @@ openSet.push(start);
 
 
 function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (animationRunnig) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    if(openSet.length > 0) {
-        // Keep going
-        var winner = 0;
-        for (let i = 0; i < openSet.length; i++) {
-            if(openSet[i].f < openSet[winner].f) {
-                winner = i;
-            }
-        }
-
-        var current = openSet[winner];
-
-        if(current === end) {
-            console.log("DONE!!!!");
-        }
-
-        removeFromArray(openSet, current);
-        closedSet.push(current);
-
-        var neighbours = current.neighbors;
-        for (let i = 0; i < neighbours.length; i++) {
-            var neighbour = neighbours[i];
-
-            if(!closedSet.includes(neighbour)) {
-                var tempG = neighbour.g + 1;
-
-                if(openSet.includes(neighbour)) {
-                    if(tempG < neighbour.g) {
-                        neighbour.g = tempG;
-                    }
-                } else {
-                    neighbour.g = tempG;
-                    openSet.push(neighbour);
+        if(openSet.length > 0) {
+            // Keep going
+            var winner = 0;
+            for (let i = 0; i < openSet.length; i++) {
+                if(openSet[i].f < openSet[winner].f) {
+                    winner = i;
                 }
-
-                neighbour.h = heuristic(neighbour, end);
-
-                neighbour.f = neighbour.g + neighbour.h;
-                neighbour.previous = current;
             }
-            
+
+            var current = openSet[winner];
+
+            if(current === end) {
+                console.log("DONE!!!!");
+                animationRunnig = false;
+            }
+
+            removeFromArray(openSet, current);
+            closedSet.push(current);
+
+            var neighbours = current.neighbors;
+            for (let i = 0; i < neighbours.length; i++) {
+                var neighbour = neighbours[i];
+
+                if(!closedSet.includes(neighbour) && !neighbour.wall) {
+                    var tempG = neighbour.g + 1;
+
+                    if(openSet.includes(neighbour)) {
+                        if(tempG < neighbour.g) {
+                            neighbour.g = tempG;
+                        }
+                    } else {
+                        neighbour.g = tempG;
+                        openSet.push(neighbour);
+                    }
+
+                    neighbour.h = heuristic(neighbour, end);
+
+                    neighbour.f = neighbour.g + neighbour.h;
+                    neighbour.previous = current;
+                }
+                
+            }
+
+        } else {
+            // No solution
         }
 
-    } else {
-        // No solution
-    }
-
-    gridArray.forEach((row) => {
-        row.forEach((spot) => {
-            spot.drawGrid('white');
+        gridArray.forEach((row) => {
+            row.forEach((spot) => {
+                spot.drawGrid('white');
+            });
         });
-    });
 
-    closedSet.forEach((spot) => {
-        spot.show('red');
-    });
+        closedSet.forEach((spot) => {
+            spot.show('red');
+        });
 
-    openSet.forEach((spot) => {
-        spot.show('green');
-    });
+        openSet.forEach((spot) => {
+            spot.show('green');
+        });
 
-    // Find the path
-    path = [];
-    var temp = current;
-    path.push(temp);
-    if(temp.previous != undefined) {
-        while (temp.previous) {
-            path.push(temp.previous);
-            temp = temp.previous;
+        // Find the path
+        path = [];
+        var temp = current;
+        path.push(temp);
+        if(temp.previous != undefined) {
+            while (temp.previous) {
+                path.push(temp.previous);
+                temp = temp.previous;
+            }
         }
-    }
-    
+        
 
-    path.forEach((spot) => {
-        spot.show('blue');
-    });
-    
+        path.forEach((spot) => {
+            spot.show('blue');
+        });
+    }    
 
     requestAnimationFrame(animate);
 }
