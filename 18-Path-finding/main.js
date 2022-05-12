@@ -1,13 +1,16 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const fpsEl = document.getElementById('fpsEl');
+const openSetEl = document.getElementById('openSetEl');
+const closedSetEl = document.getElementById('closedSetEl');
 
 canvas.width = 400;
 canvas.height = 400;
 
 let animationRunnig = true;
 
-let cols = 12;
-let rows = 12;
+let cols = 15;
+let rows = 15;
 let gridArray = new Array(cols);
 
 let closedSet = [];
@@ -18,6 +21,7 @@ let w, h;
 let path = [];
 w = canvas.width / cols;
 h = canvas.height / rows;
+let lastTime = 0;
 
 class Spot {
     constructor(i, j) {
@@ -120,7 +124,14 @@ end.wall = false;
 openSet.push(start);
 
 
-function animate() {
+function animate(timeStamp) {
+    let deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
+    let fps = 1000 /deltaTime;
+    fpsEl.innerHTML = fps.toFixed(2);
+
+
+
     if (animationRunnig) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -201,8 +212,11 @@ function animate() {
         path.forEach((spot) => {
             spot.show('blue');
         });
-    }    
+    }
+
+    openSetEl.innerHTML = openSet.length;
+    closedSetEl.innerHTML = closedSet.length;
     requestAnimationFrame(animate);
 }
 
-animate();
+animate(0);

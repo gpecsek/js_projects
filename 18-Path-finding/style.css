@@ -14,3 +14,30 @@ canvas {
     left: 0;
     overflow: hidden;
 }
+
+.fps {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    z-index: 10;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+.openSet {
+    position: fixed;
+    top: 40px;
+    right: 100px;
+    z-index: 10;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+.closedSet {
+    position: fixed;
+    top: 60px;
+    right: 100px;
+    z-index: 10;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
