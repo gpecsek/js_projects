@@ -17,7 +17,15 @@ export default class Tile {
             x: this.offSet.x + this.position.x + (this.tile.width / 2),
             y: this.offSet.y + this.position.y + (this.tile.height / 2)
         }
-        this.blocked = blocked;
+
+        // Variables for A* algorithm
+        this.neighbor = [];
+        this.previous = undefined;
+        if(blocked == 1) {
+            this.blocked = true;
+        } else {
+            this.blocked = false;
+        }
     }
 
     draw(ctx) {
@@ -32,7 +40,7 @@ export default class Tile {
         ctx.fillStyle = this.color;
         ctx.fill();
 
-        if (this.blocked == 0) {
+        if (!this.blocked) {
             ctx.beginPath();
             ctx.arc(this.tileOrigo.x, this.tileOrigo.y, 1, 0, Math.PI * 2);
             ctx.fillStyle = 'red';
@@ -43,7 +51,7 @@ export default class Tile {
     }
 
     update(ctx) {
-        if (this.blocked == 1) {
+        if (this.blocked) {
             this.color = 'black';
         }
         this.position = {   // X and Y position of the tile in pixel
@@ -62,5 +70,34 @@ export default class Tile {
             [this.offSet.x + this.position.x, this.offSet.y + this.position.y + this.tile.height / 2]                       // x4, y4
         ]
         this.draw(ctx)
+    }
+
+    addNeighbors(grid, index, cols, rows) {
+
+        if (grid[index - cols - 1] && index % cols != 0) this.neighbor.push(grid[index - cols - 1]);     // LEFT-TOP
+        if (grid[index - cols]) this.neighbor.push(grid[index - cols]);             // MID-TOP
+        if (grid[index - cols + 1] && (index + 1) % cols != 0) this.neighbor.push(grid[index - cols + 1]);     // RIGHT-TOP
+
+        if (grid[index - 1] && index % cols != 0) this.neighbor.push(grid[index - 1]);                   // LEFT
+        if (grid[index + 1] && (index + 1) % cols != 0) this.neighbor.push(grid[index + 1]);                   // RIGHT
+        
+        if (grid[index + cols - 1] && index % cols != 0) this.neighbor.push(grid[index + cols - 1]);     // LEFT-BOTTOM
+        if (grid[index + cols]) this.neighbor.push(grid[index + cols]);             // MID-BOTTOM
+        if (grid[index + cols + 1] && (index + 1) % cols != 0) this.neighbor.push(grid[index + cols + 1]);     // RIGHT-BOTTOM
+    }
+
+    drawNeighbors(ctx, neighbor, color) {
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.moveTo(neighbor.poly[0][0], neighbor.poly[0][1]);
+        ctx.lineTo(neighbor.poly[1][0], neighbor.poly[1][1]);
+        ctx.lineTo(neighbor.poly[2][0], neighbor.poly[2][1]);
+        ctx.lineTo(neighbor.poly[3][0], neighbor.poly[3][1]);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        ctx.restore();
     }
 }

@@ -1,5 +1,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
 const fpsEl = document.getElementById('fpsEl');
 const openSetEl = document.getElementById('openSetEl');
 const closedSetEl = document.getElementById('closedSetEl');
@@ -9,8 +10,8 @@ canvas.height = 400;
 
 let animationRunnig = true;
 
-let cols = 15;
-let rows = 15;
+let cols = 225;
+let rows = 225;
 let gridArray = new Array(cols);
 
 let closedSet = [];
@@ -34,7 +35,7 @@ class Spot {
         this.previous = undefined;
         this.wall = false;
 
-        if(Math.random() < 0.2) {
+        if(Math.random() < 0.4) {
             this.wall = true;
         }
     }
@@ -115,6 +116,12 @@ for (let i = 0; i < cols; i++) {
     }
 }
 
+/*for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+        gridArray[i][j].drawGrid('white');
+    }
+}*/
+
 start = gridArray[0][0];
 end = gridArray[cols - 1][rows - 1];
 
@@ -184,11 +191,11 @@ function animate(timeStamp) {
             // No solution
         }
 
-        gridArray.forEach((row) => {
+        /*gridArray.forEach((row) => {
             row.forEach((spot) => {
                 spot.drawGrid('white');
             });
-        });
+        });*/
 
         closedSet.forEach((spot) => {
             spot.show('red');

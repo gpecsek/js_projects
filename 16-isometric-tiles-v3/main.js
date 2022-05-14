@@ -14,9 +14,31 @@ const tileIndexEl = document.getElementById('tileIndexEl');
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+// Map
+const tileMap = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+
+let map = {
+    cols: tileMap[0].length,
+    rows: tileMap.length
+}
+
 let tile = {
-    width: 100,
-    height: 50
+    width: 80,
+    height: 40
 }
 let offSet = {
     x: (canvas.width / 2) - (tile.width / 2),
@@ -57,7 +79,13 @@ let timer = 0;
 const inputHandler = new InputHandler(keys);
 
 // Populate the mapTilesArray with data (Tiles)
-drawMap(mapTilesArray, offSet, tile, tileColor);
+drawMap(mapTilesArray, offSet, tile, tileColor, tileMap);
+console.log(mapTilesArray);
+
+// Adding neighbours
+mapTilesArray.forEach((tile, tileIndex) => {
+    tile.addNeighbors(mapTilesArray, tileIndex, map.cols, map.rows);
+});
 
 // Create the player
 const player = new Player(mapTilesArray[0].position.x, mapTilesArray[0].position.y, 0, offSet, tile, '#DE847B');
@@ -143,17 +171,10 @@ function animate(timeStamp) {
 
     // Draw lines between the tile the mouse over and the tile where the player is
     if(tileIndexMouseIn != undefined) {
-        ctx.save();
-
-        ctx.lineWidth = '1px';
-        ctx.strokeStyle = 'red';
-
-        ctx.beginPath();
-        ctx.moveTo(mapTilesArray[tileIndexMouseIn].tileOrigo.x, mapTilesArray[tileIndexMouseIn].tileOrigo.y);
-        ctx.lineTo(player.playerOrigo.x, player.playerOrigo.y);
-        ctx.stroke();
-
-        ctx.restore();
+        let tileNeighbors = mapTilesArray[tileIndexMouseIn].neighbor;
+        tileNeighbors.forEach((neighbor) => {
+            neighbor.drawNeighbors(ctx, neighbor, 'rgba(250,128,114, 0.3)');
+        });
     }
 
     requestAnimationFrame(animate);
@@ -169,7 +190,7 @@ window.addEventListener('mousemove', (e) => {
 
 window.addEventListener('click', (e) => {
     // if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
-    console.log(tileIndexMouseIn);
+
     if (tileIndexMouseIn != undefined) {
         player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
         player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
