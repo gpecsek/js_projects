@@ -27,6 +27,15 @@ export function inside(p, vs) {
     return inside;
 };
 
+// Remove element from an array
+export function removeFromArray(arr, elt) {
+    for (let i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] == elt) {
+            arr.splice(i, 1);
+        }
+    }
+}
+
 // TEMPORARY FUNCTION
 // Random color calculator for tile click checking
 export function randomColor() {

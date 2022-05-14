@@ -1,4 +1,4 @@
-import {inside, randomColor, drawMap} from "./src/functions.js";
+import {inside, drawMap, removeFromArray} from "./src/functions.js";
 import InputHandler from "./src/input.js";
 import Player from "./src/player.js";
 
@@ -16,19 +16,25 @@ canvas.height = innerHeight;
 
 // Map
 const tileMap = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-    [0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
-    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
 let map = {
@@ -75,12 +81,19 @@ let lastTime = 0;
 let deltaTime = 0;
 let timer = 0;
 
+// A* algorithm variables
+let closedSet = [];
+let openSet = [];
+let start;
+let end;
+let path = [];
+let pathFindingRunning = true;
+
 // initializing input control
 const inputHandler = new InputHandler(keys);
 
 // Populate the mapTilesArray with data (Tiles)
 drawMap(mapTilesArray, offSet, tile, tileColor, tileMap);
-console.log(mapTilesArray);
 
 // Adding neighbours
 mapTilesArray.forEach((tile, tileIndex) => {
@@ -88,7 +101,11 @@ mapTilesArray.forEach((tile, tileIndex) => {
 });
 
 // Create the player
-const player = new Player(mapTilesArray[0].position.x, mapTilesArray[0].position.y, 0, offSet, tile, '#DE847B');
+const player = new Player(mapTilesArray[0].position.x, mapTilesArray[0].position.y, 0, offSet, tile, 'rgba(34,139,34,0.8)');
+
+// Player start position set as A* algorithm start and pushed to openSet 
+start = mapTilesArray[0];
+openSet.push(start);
 
 function animate(timeStamp) {
     // measuring FPS
@@ -162,20 +179,91 @@ function animate(timeStamp) {
             tilePosEl.innerHTML = tile.rectPos.x + ", " + tile.rectPos.y;
 
             tileIndexMouseIn = tileIndex;
+
+            end = mapTilesArray[tileIndexMouseIn];
+
+            // START of A* pathfinding algorithm
+            if (pathFindingRunning && mapTilesArray[tileIndexMouseIn].blocked != true) {
+                if(openSet.length > 0) {
+                    // Keep going
+                    var winner = 0;
+                    for (let i = 0; i < openSet.length; i++) {
+                        if(openSet[i].f < openSet[winner].f) {
+                            winner = i;
+                        }
+                    }
+    
+                    var current = openSet[winner];
+                    console.log(current)
+                    if(current === end) {
+                        console.log("DONE!!!!");
+                        pathFindingRunning = false;
+                    }
+    
+                    removeFromArray(openSet, current);
+                    closedSet.push(current);
+    
+                    var neighbors = current.neighbor;
+                    for (let i = 0; i < neighbors.length; i++) {
+                        var neighbor = neighbors[i];
+    
+                        if(!closedSet.includes(neighbor) && !neighbor.blocked) {
+                            var tempG = neighbor.g + 1;
+    
+                            if(openSet.includes(neighbor)) {
+                                if(tempG < neighbor.g) {
+                                    neighbor.g = tempG;
+                                }
+                            } else {
+                                neighbor.g = tempG;
+                                openSet.push(neighbor);
+                            }
+    
+                            neighbor.h = Math.abs(neighbor.i - end.i) + Math.abs(neighbor.j - end.j);
+    
+                            neighbor.f = neighbor.g + neighbor.h;
+                            neighbor.previous = current;
+                        }
+                        
+                    }
+    
+                } else {
+                    console.log("No solution!");
+                    pathFindingRunning = false;
+                    // No solution
+                }
+        
+                // Find the path
+                if (current) {
+                    path = [];
+                    var temp = current;
+                    path.push(temp);
+                    while (temp.previous) {
+                        path.push(temp.previous);
+                        temp = temp.previous;
+                    }
+                }
+            }
+            // END of A* pathfinding algorithm
         }
     });
+    // Draw path
+    path.forEach((tile) => {
+        tile.drawPath(ctx, tile, 'rgba(193,217,183,0.5)');
+    });
+
     tileIndexEl.innerHTML = tileIndexMouseIn;
 
     // Updating player
     player.update(ctx);
 
-    // Draw lines between the tile the mouse over and the tile where the player is
-    if(tileIndexMouseIn != undefined) {
+    // Draw neighbors of the tile the mouse is over
+    /*if(tileIndexMouseIn != undefined) {
         let tileNeighbors = mapTilesArray[tileIndexMouseIn].neighbor;
         tileNeighbors.forEach((neighbor) => {
             neighbor.drawNeighbors(ctx, neighbor, 'rgba(250,128,114, 0.3)');
         });
-    }
+    }*/
 
     requestAnimationFrame(animate);
 }
@@ -194,5 +282,7 @@ window.addEventListener('click', (e) => {
     if (tileIndexMouseIn != undefined) {
         player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
         player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
+        start = mapTilesArray[tileIndexMouseIn];
+        console.log(start);
     }
 });
