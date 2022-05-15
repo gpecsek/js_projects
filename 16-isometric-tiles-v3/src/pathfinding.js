@@ -1,5 +1,4 @@
 export function pathFinding(openSet, closedSet, start, end, path, pathFindingRunning) {
-    //let path = [];
 
     while(openSet.length > 0) {
 
@@ -63,7 +62,6 @@ export function pathFinding(openSet, closedSet, start, end, path, pathFindingRun
             }
         }
     }
-    
     return path, pathFindingRunning;
 }
 

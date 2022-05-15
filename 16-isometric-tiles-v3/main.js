@@ -182,7 +182,7 @@ function animate(timeStamp) {
             path.forEach((tile) => {
                 tile.drawPath(ctx, tile, 'rgba(193,217,183,0.5)');
             });
-            // END of A* pathfinding algorithm
+            // END of A* pathfinding algorithm   
         }
     });
 
