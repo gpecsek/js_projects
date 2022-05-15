@@ -52,3 +52,21 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 14px;
 }
+
+.startPos {
+    position: absolute;
+    z-index: 10;
+    top: 90px;
+    left: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+.endPos {
+    position: absolute;
+    z-index: 10;
+    top: 110px;
+    left: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+}

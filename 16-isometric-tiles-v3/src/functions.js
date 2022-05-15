@@ -27,13 +27,22 @@ export function inside(p, vs) {
     return inside;
 };
 
-// Remove element from an array
-export function removeFromArray(arr, elt) {
-    for (let i = arr.length - 1; i >= 0; i--) {
-        if (arr[i] == elt) {
-            arr.splice(i, 1);
-        }
-    }
+// Draw red frame around the Tile the mouse in
+export function drawRedFrame(ctx, tile) {
+    ctx.save();
+
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = '2px'; 
+
+    ctx.beginPath();
+    ctx.moveTo(tile.poly[0][0], tile.poly[0][1]);
+    ctx.lineTo(tile.poly[1][0], tile.poly[1][1]);
+    ctx.lineTo(tile.poly[2][0], tile.poly[2][1]);
+    ctx.lineTo(tile.poly[3][0], tile.poly[3][1]);
+    ctx.closePath()
+    ctx.stroke();
+
+    ctx.restore();
 }
 
 // TEMPORARY FUNCTION

@@ -1,5 +1,6 @@
-import {inside, drawMap, removeFromArray} from "./src/functions.js";
+import {inside, drawMap, drawRedFrame} from "./src/functions.js";
 import InputHandler from "./src/input.js";
+import { pathFinding } from "./src/pathfinding.js";
 import Player from "./src/player.js";
 
 const canvas = document.getElementById('canvas');
@@ -10,6 +11,8 @@ const tilePosEl = document.getElementById('tilePosEl');
 const mousePosEl = document.getElementById('mousePosEl');
 const fpsPosEl = document.getElementById('fpsPosEl');
 const tileIndexEl = document.getElementById('tileIndexEl');
+const startPosEl = document.getElementById('startPosEl');
+const endPosEl = document.getElementById('endPosEl');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -32,9 +35,9 @@ const tileMap = [
     [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
     [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
     [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-    [1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
 ]
 
 let map = {
@@ -161,95 +164,26 @@ function animate(timeStamp) {
     mapTilesArray.forEach((tile, tileIndex) => {
         let x = inside([ mousePos.x - rect.left, mousePos.y - rect.top ], tile.poly)
         if (x) {
-            ctx.save();
 
-            ctx.strokeStyle = 'red';
-            ctx.lineWidth = '2px'; 
-
-            ctx.beginPath();
-            ctx.moveTo(tile.poly[0][0], tile.poly[0][1]);
-            ctx.lineTo(tile.poly[1][0], tile.poly[1][1]);
-            ctx.lineTo(tile.poly[2][0], tile.poly[2][1]);
-            ctx.lineTo(tile.poly[3][0], tile.poly[3][1]);
-            ctx.closePath()
-            ctx.stroke();
-
-            ctx.restore();
+            drawRedFrame(ctx, tile);    
 
             tilePosEl.innerHTML = tile.rectPos.x + ", " + tile.rectPos.y;
 
             tileIndexMouseIn = tileIndex;
-
             end = mapTilesArray[tileIndexMouseIn];
+            endPosEl.innerHTML = end.rectPos.x + ", " + end.rectPos.y;
 
             // START of A* pathfinding algorithm
             if (pathFindingRunning && mapTilesArray[tileIndexMouseIn].blocked != true) {
-                if(openSet.length > 0) {
-                    // Keep going
-                    var winner = 0;
-                    for (let i = 0; i < openSet.length; i++) {
-                        if(openSet[i].f < openSet[winner].f) {
-                            winner = i;
-                        }
-                    }
-    
-                    var current = openSet[winner];
-                    console.log(current)
-                    if(current === end) {
-                        console.log("DONE!!!!");
-                        pathFindingRunning = false;
-                    }
-    
-                    removeFromArray(openSet, current);
-                    closedSet.push(current);
-    
-                    var neighbors = current.neighbor;
-                    for (let i = 0; i < neighbors.length; i++) {
-                        var neighbor = neighbors[i];
-    
-                        if(!closedSet.includes(neighbor) && !neighbor.blocked) {
-                            var tempG = neighbor.g + 1;
-    
-                            if(openSet.includes(neighbor)) {
-                                if(tempG < neighbor.g) {
-                                    neighbor.g = tempG;
-                                }
-                            } else {
-                                neighbor.g = tempG;
-                                openSet.push(neighbor);
-                            }
-    
-                            neighbor.h = Math.abs(neighbor.i - end.i) + Math.abs(neighbor.j - end.j);
-    
-                            neighbor.f = neighbor.g + neighbor.h;
-                            neighbor.previous = current;
-                        }
-                        
-                    }
-    
-                } else {
-                    console.log("No solution!");
-                    pathFindingRunning = false;
-                    // No solution
-                }
-        
-                // Find the path
-                if (current) {
-                    path = [];
-                    var temp = current;
-                    path.push(temp);
-                    while (temp.previous) {
-                        path.push(temp.previous);
-                        temp = temp.previous;
-                    }
-                }
+                pathFinding(openSet, closedSet, start, end, path, pathFindingRunning);
             }
+
+            // Draw path
+            path.forEach((tile) => {
+                tile.drawPath(ctx, tile, 'rgba(193,217,183,0.5)');
+            });
             // END of A* pathfinding algorithm
         }
-    });
-    // Draw path
-    path.forEach((tile) => {
-        tile.drawPath(ctx, tile, 'rgba(193,217,183,0.5)');
     });
 
     tileIndexEl.innerHTML = tileIndexMouseIn;
@@ -277,12 +211,14 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-    // if (tileIndexMouseIn != undefined) mapTilesArray[tileIndexMouseIn].color = randomColor();
-
     if (tileIndexMouseIn != undefined) {
         player.position.x = mapTilesArray[tileIndexMouseIn].position.x;
         player.position.y = mapTilesArray[tileIndexMouseIn].position.y;
+        openSet = [];
+        path = [];
         start = mapTilesArray[tileIndexMouseIn];
-        console.log(start);
+        openSet.push(start);
+        pathFindingRunning = true;
+        startPosEl.innerHTML = start.rectPos.x + ", " + start.rectPos.y;
     }
 });
