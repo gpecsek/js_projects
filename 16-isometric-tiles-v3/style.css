@@ -17,56 +17,65 @@
     user-select: none
 }
 
-.mousePos {
+/* The top left container to show data like FPS, mouse position, etc... */
+
+.container-measurement {
     position: absolute;
-    z-index: 10;
     top: 10px;
     left: 10px;
+    border: 1px solid #000000;
+    z-index: 9;
+    width: 250px;
+    height: 200px;
+    background-color: rgba(215, 215, 215, 0.9);
+    color: #333333;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
+}
+
+.container-measurement > p {
+    position: absolute;
+    z-index: 10;
+    left: 10px;
+}
+
+.mousePos {
+    top: 10px;
 }
 
 .tilePos {
-    position: absolute;
-    z-index: 10;
-    top: 30px;
-    left: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
+    top: 50px;
 }
 
 .tileIndex {
-    position: absolute;
-    z-index: 10;
-    top: 50px;
-    left: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-}
-
-.fpsPos {
-    position: absolute;
-    z-index: 10;
     top: 70px;
-    left: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
 }
 
 .startPos {
-    position: absolute;
-    z-index: 10;
     top: 90px;
-    left: 10px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
 }
 
 .endPos {
-    position: absolute;
-    z-index: 10;
     top: 110px;
-    left: 10px;
+}
+
+.fpsPos {
+    top: 150px;
+    font-size: 16px;
+}
+
+/* Control panel */
+
+.container-control {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-left: 1px solid #000000;
+    z-index: 9;
+    width: 250px;
+    height: 100vh;
+    background-color: rgb(73, 73, 73);
+    color: #333333;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
 }

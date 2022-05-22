@@ -14,7 +14,7 @@ const tileIndexEl = document.getElementById('tileIndexEl');
 const startPosEl = document.getElementById('startPosEl');
 const endPosEl = document.getElementById('endPosEl');
 
-canvas.width = innerWidth;
+canvas.width = innerWidth - 250;
 canvas.height = innerHeight;
 
 // Map
@@ -205,9 +205,11 @@ function animate(timeStamp) {
 animate(0);
 
 window.addEventListener('mousemove', (e) => {
-    mousePos.x = e.x;
-    mousePos.y = e.y;
-    mousePosEl.innerHTML = "x: " + mousePos.x + ", y: " + mousePos.y;
+    if (e.x < canvas.width) {
+        mousePos.x = e.x;
+        mousePos.y = e.y;
+        mousePosEl.innerHTML = "x: " + mousePos.x + ", y: " + mousePos.y;
+    }
 });
 
 window.addEventListener('click', (e) => {
